@@ -17,6 +17,8 @@ sui-springboot/src/main/webapp/
 .idea/
 *.iml
 .vscode/
+.wrangler/
+supabase/.temp/
 
 sui-springboot/src/main/resources/application-local.yml
 sui-springboot/src/main/resources/config/application-local.properties
