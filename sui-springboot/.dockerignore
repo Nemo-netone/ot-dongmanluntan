@@ -1,0 +1,9 @@
+target/
+logs/
+*.log
+.env
+.env.*
+.idea/
+*.iml
+sql/*.sql
+src/main/webapp/

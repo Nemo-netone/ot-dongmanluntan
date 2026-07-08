@@ -1,0 +1,22 @@
+node_modules/
+dist/
+target/
+logs/
+*.log
+
+# Local source dumps and generated archives are kept out of the public repo.
+202510_dmlt.sql
+sui-springboot/sql/*.sql
+sui-springboot/src/main/webapp/
+动漫论坛图片/*.mp4
+
+.env
+.env.*
+!.env.example
+
+.idea/
+*.iml
+.vscode/
+
+sui-springboot/src/main/resources/application-local.yml
+sui-springboot/src/main/resources/config/application-local.properties
