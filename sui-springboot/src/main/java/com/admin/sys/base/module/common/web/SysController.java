@@ -37,6 +37,8 @@ import static com.admin.sys.base.module.config.service.SysConfigService.getSysCo
 @RestController
 @RequestMapping("/api/sys")//该地址需要代理需要api
 public class SysController extends BaseController {
+    private static final String DEFAULT_PROJECT_DOMAIN = "https://ot-dongmanluntan-api-273280-7-1369167244.sh.run.tcloudbase.com";
+
     @Autowired
     private SysRoleService sysRoleService;
     @Autowired
@@ -63,6 +65,9 @@ public class SysController extends BaseController {
     public ResultInfo getAdminConfig(){
         Map map = new HashMap();
         String projectDomain = System.getenv().getOrDefault("PROJECT_DOMAIN", getSysConfig("projectDomain"));
+        if (StringUtils.isEmpty(projectDomain) || projectDomain.contains("127.0.0.1") || projectDomain.contains("localhost")) {
+            projectDomain = DEFAULT_PROJECT_DOMAIN;
+        }
         SysRole sysRole = new SysRole();
         sysRole.setDelFlag(0);
         List<SysRole> allRole = sysRoleService.getList(sysRole);
