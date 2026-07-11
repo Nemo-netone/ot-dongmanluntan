@@ -128,3 +128,17 @@ sui-element-ui/static/config.js
 - 上传文件保存在 CloudBase Run 临时目录，适合演示，不保证长期保留。
 - 前端是旧版 Vue 2 + Webpack 3 项目，构建时可能出现 Sass/Webpack 旧 API 警告，但不影响当前构建产物。
 - Supabase 远端 migration 历史包含其他项目记录，本项目只使用 schema 限定的 SQL 脚本，不对远端全局 migration 历史做修复或重置。
+
+## 2026-07-11 Pages Worker 恢复部署
+
+原 CloudBase Run 后端已出现 503、CORS 或资源隔离问题。线上演示已切换为 Cloudflare Pages Worker + Supabase 独立 schema：
+
+- Pages 项目：`ot-dongmanluntan`
+- 稳定地址：https://ot-dongmanluntan.pages.dev
+- Supabase schema：`ot_dongmanluntan`
+- API：`/health`、`/api/login`、`/api/summary`、`/api/items/*`
+- 数据：3 个公开演示账号、18 条业务记录
+- 验证：全部账号登录、summary、列表、创建、更新、删除清理和 Playwright 登录前后视图均通过
+
+原 Java/Vue/SSM 源码继续保留；兼容层只负责稳定的公开作品集体验。
+

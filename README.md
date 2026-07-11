@@ -132,3 +132,17 @@ npm run build
 ## 许可证
 
 本项目采用 PolyForm Noncommercial License 1.0.0。允许非商业学习、使用和修改；商业使用需要获得作者单独授权。
+
+## 2026-07-11 Pages Worker 恢复部署
+
+原 CloudBase Run 后端已出现 503、CORS 或资源隔离问题。线上演示已切换为 Cloudflare Pages Worker + Supabase 独立 schema：
+
+- Pages 项目：`ot-dongmanluntan`
+- 稳定地址：https://ot-dongmanluntan.pages.dev
+- Supabase schema：`ot_dongmanluntan`
+- API：`/health`、`/api/login`、`/api/summary`、`/api/items/*`
+- 数据：3 个公开演示账号、18 条业务记录
+- 验证：全部账号登录、summary、列表、创建、更新、删除清理和 Playwright 登录前后视图均通过
+
+原 Java/Vue/SSM 源码继续保留；兼容层只负责稳定的公开作品集体验。
+
