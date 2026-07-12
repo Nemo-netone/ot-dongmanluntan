@@ -42,6 +42,40 @@ export default {
   },
 };
 
+
+async function portfolioSummary(env) {
+  const rows = await requestSupabase(env, "items", "GET", { order: "updated_at.desc" });
+  const modules = {};
+  for (const row of rows) modules[row.module_key] = (modules[row.module_key] || 0) + 1;
+  return result(true, null, { totalItems: rows.length, modules, latest: rows.slice(0, 6) });
+}
+
+async function portfolioItems(action, params, env) {
+  if (action === "list") {
+    const query = { order: "updated_at.desc" };
+    if (params.module_key) query.module_key = `eq.${params.module_key}`;
+    return result(true, null, await requestSupabase(env, "items", "GET", query));
+  }
+  if (action === "add") {
+    const rows = await requestSupabase(env, "items", "POST", {}, portfolioPayload(params));
+    return result(true, "created", rows[0] || null);
+  }
+  if (action === "update") {
+    if (!params.id) return result(false, "Missing id", null);
+    const rows = await requestSupabase(env, "items", "PATCH", { id: `eq.${params.id}` }, portfolioPayload(params));
+    return result(true, "updated", rows[0] || null);
+  }
+  if (action === "delete") {
+    if (!params.id) return result(false, "Missing id", null);
+    await requestSupabase(env, "items", "DELETE", { id: `eq.${params.id}` });
+    return result(true, "deleted", null);
+  }
+  return result(false, "Unknown action", null);
+}
+
+function portfolioPayload(params) {
+  return { module_key: String(params.module_key || "article"), title: String(params.title || params.name || "Forum demo record"), subtitle: String(params.subtitle || ""), status: String(params.status || "published"), owner: String(params.owner || "demo user"), amount: Number(params.amount || 0), description: String(params.description || params.content || ""), extra: params.extra || {}, updated_at: new Date().toISOString() };
+}
 async function serveAssetOrSpa(request, env) {
   if (!env.ASSETS) return new Response("Not found", { status: 404 });
   const response = await env.ASSETS.fetch(request);
@@ -57,6 +91,8 @@ async function serveAssetOrSpa(request, env) {
 }
 
 async function handleApi(action, params, env) {
+  if (action === "summary") return portfolioSummary(env);
+  if (action.startsWith("items/")) return portfolioItems(action.slice(6), params, env);
   if (action === "login/getToken") return legacyOk({ data: { token: `demo-token-${params.code || Date.now()}` } });
   if (action === "login/userLogin") return frontLogin(params, env);
   if (action === "login/loginOut") return legacyOk({ data: null, obj: null });

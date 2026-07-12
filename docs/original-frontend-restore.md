@@ -45,6 +45,8 @@ Core restored routes:
 - `/api/register/getLoginInfo`
 - `/admin/login/userLogin`
 - `/admin/login/getLoginInfo`
+- `/api/summary`
+- `/api/items/list|add|update|delete`
 
 ## Verification
 
@@ -54,12 +56,17 @@ Completed on 2026-07-12:
 - `/health` returns `frontend: original-sui-element-ui`.
 - Category, article, notice, config, logout, and login routes return HTTP 200.
 - Front login with public demo account `test / 123456` succeeds.
+- Admin login with `admin / 123456` succeeds.
+- Persistent create, update, and delete checks pass through `/api/items/*`; the temporary record is removed after verification.
+- Browser title and description metadata identify the deployed product as 动漫论坛社区.
 - Browser screenshot shows the original anime forum layout: fixed top navigation, search block, category links, carousel, notices, and article cards.
 - Screenshots:
   - `docs/screenshots/original-home.png`
   - `docs/screenshots/original-login.png`
 
 ## Known Boundary
+
+Original forum submission endpoints keep the legacy response contract; durable portfolio CRUD is exposed through `/api/items/*` and backed by the isolated Supabase schema.
 
 The original page embeds a third-party weather iframe. In headless Playwright checks, some external weather/statistic image requests can abort. Project-owned Pages assets and API routes passed.
 
